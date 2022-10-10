@@ -31,6 +31,12 @@ export default class View {
       }
     });
   }
+  show() {
+    this._container.classList.remove("hidden");
+  }
+  hide() {
+    this._container.classList.add("hidden");
+  }
   _clear() {
     this._container.innerHTML = "";
   }

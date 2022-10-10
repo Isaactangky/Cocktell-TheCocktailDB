@@ -57,16 +57,38 @@ export const loadSearchResults = async function (query) {
     throw error;
   }
 };
+const setLocalStorage = function () {
+  const date = new Date();
+  const dateStr = `${date.getDate()}/${date.getMonth()}`;
+  console.log(dateStr);
+  const recommendations = JSON.stringify({
+    date: dateStr,
+    randomRecipes: state.search.results,
+  });
+  localStorage.setItem("recommendations", recommendations);
+};
+const getLocalStorage = function () {
+  const history = JSON.parse(localStorage.getItem("recommendations"));
+  return history;
+};
 export const loadRandomRecipes = async function () {
   try {
-    // www.thecocktaildb.com/api/json/v1/1/random.php
-    for (let i = 0; i < NUM_RANDOM_DRINKS; i++) {
-      const { drinks } = await AJAX(`${API_LINK}random.php`);
-      console.log("random", drinks);
-      if (!drinks)
-        throw new Error(":(  No cocktail found, please try another keyword");
-      const drink = formatDrink(drinks[0]);
-      state.search.results.push(drink);
+    const history = getLocalStorage();
+    // if date changes / no local storage, get random recipes
+    if (
+      !history ||
+      history.date !== `${new Date().getDate()}/${new Date().getMonth()}`
+    ) {
+      for (let i = 0; i < NUM_RANDOM_DRINKS; i++) {
+        const { drinks } = await AJAX(`${API_LINK}random.php`);
+        if (!drinks)
+          throw new Error(":(  No cocktail found, please try another keyword");
+        const drink = formatDrink(drinks[0]);
+        state.search.results.push(drink);
+      }
+      setLocalStorage();
+    } else {
+      state.search.results = history.randomRecipes;
     }
   } catch (error) {
     throw error;

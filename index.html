@@ -23,28 +23,39 @@
     <script defer src="src/js/controller.js" type="module"></script>
   </head>
   <body>
-    <header>
-      <div class="logo-container">
-        <img src="img/logo-blue-2.png" alt="Logo" class="logo" />
-        <p class="app-name">Cocktell</p>
-      </div>
+    <div class="page-wrapper">
+      <header>
+        <!-- TODO redirect to home page -->
+        <a class="logo-container" href="./">
+          <img src="img/logo-blue-2.png" alt="Logo" class="logo" />
+          <p class="app-name">Cocktell</p>
+        </a>
 
-      <form action="" class="search-form">
-        <input type="text" class="search-input" placeholder="Search cocktail" />
-        <button class="search-btn">Search</button>
-      </form>
-    </header>
+        <form action="" class="search-form">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search cocktail"
+          />
+          <button class="search-btn">Search</button>
+        </form>
+        <div class="loader hidden">
+          <div class="a"></div>
+          <div class="b"></div>
+        </div>
+      </header>
+      <!-- <div class="loader" style="display: none"> -->
 
-    <main>
-      <div class="search-results">
-        <div class="search-title-container">
-          <p class="search-title">Cocktails of the Day</p>
-          <!-- <p class="search-title hidden">
+      <main>
+        <div class="search-results">
+          <div class="search-title-container">
+            <p class="search-title">Cocktails of the Day</p>
+            <!-- <p class="search-title hidden">
             Result for: <span class="search-query"></span>
           </p> -->
-        </div>
-        <ul class="preview-container">
-          <!-- <li class="preview">
+          </div>
+          <ul class="preview-container">
+            <!-- <li class="preview">
             <a class="preview-link" href="#">
               <img
                 src="https://www.thecocktaildb.com/images/media/drink/bry4qh1582751040.jpg"
@@ -64,73 +75,80 @@
               <p class="preview-title">Tommy's Margarita</p>
             </a>
           </li> -->
-        </ul>
-      </div>
-      <div class="recipe-container">
-        <div class="recipe-header">
-          <img
-            src="https://www.thecocktaildb.com/images/media/drink/loezxn1504373874.jpg"
-            alt="cocktail image"
-            class="cocktail-img"
-          />
-          <h2 class="recipe-cocktail-title">Tommy's Margarita</h2>
-        </div>
-        <div class="recipe-info">
-          <ul class="recipe-category">
-            <li class="category">
-              Category: <span class="category-text">Ordinary Drink</span>
-            </li>
-            <li class="category">
-              IBA Class: <span class="category-text">New Era Drinks</span>
-            </li>
-            <li class="category">
-              Alcoholic: <span class="category-text">Alcoholic</span>
-            </li>
-            <li class="category">
-              Glass to use:
-              <span class="category-text">Old-Fashioned glass</span>
-            </li>
           </ul>
-          <div class="recipe-main">
-            <p class="info-title ingredients">INGREDIENTS</p>
-            <div class="ingredients-container">
-              <ul class="ingredients">
-                <li class="ingredient">
-                  <i class="fa-solid fa-wine-glass"></i>
-                  <span class="quantity">4.5 cl </span>Tequila
-                </li>
-                <li class="ingredient">
-                  <i class="fa-solid fa-wine-glass"></i>
-                  <span class="quantity">1.5 cl </span>Lime Juice
-                </li>
-                <li class="ingredient">
-                  <i class="fa-solid fa-wine-glass"></i>
-                  <span class="quantity">1 </span>Agave syrup
-                </li>
-                <li class="ingredient">
-                  <i class="fa-solid fa-wine-glass"></i>
-                  <span class="quantity">4.5 cl </span>Tequila
-                </li>
-                <li class="ingredient">
-                  <i class="fa-solid fa-wine-glass"></i>
-                  <span class="quantity"></span>Lime Juice
-                </li>
-              </ul>
-            </div>
-            <p class="info-title instructions">INSTRUCTIONS</p>
-            <ol>
-              <li class="instruction-text">
-                Rub rim of cocktail glass with lime juice. Dip rim in coarse
-                salt. Shake tequila, blue curacao, and lime juice with ice,
-                strain into the salt-rimmed glass, and serve
-              </li>
-            </ol>
-          </div>
+          <footer>
+            <p>© Copyright by Isaac Tang</p>
+          </footer>
         </div>
-      </div>
-    </main>
-    <footer>
-      <p>© Copyright by Isaac Tang</p>
-    </footer>
+        <div class="recipe-container">
+          <div class="welcome-message-container">
+            <p id="welcome-message">
+              Welcome! Start by searching for a recipe or selcting today's
+              recommendations.
+            </p>
+          </div>
+          <!-- <div class="recipe-header">
+            <img
+              src="https://www.thecocktaildb.com/images/media/drink/loezxn1504373874.jpg"
+              alt="cocktail image"
+              class="cocktail-img"
+            />
+            <h2 class="recipe-cocktail-title">Tommy's Margarita</h2>
+          </div>
+          <div class="recipe-info">
+            <ul class="recipe-category">
+              <li class="category">
+                Category: <span class="category-text">Ordinary Drink</span>
+              </li>
+              <li class="category">
+                IBA Class: <span class="category-text">New Era Drinks</span>
+              </li>
+              <li class="category">
+                Alcoholic: <span class="category-text">Alcoholic</span>
+              </li>
+              <li class="category">
+                Glass to use:
+                <span class="category-text">Old-Fashioned glass</span>
+              </li>
+            </ul>
+            <div class="recipe-main">
+              <p class="info-title ingredients">INGREDIENTS</p>
+              <div class="ingredients-container">
+                <ul class="ingredients">
+                  <li class="ingredient">
+                    <i class="fa-solid fa-wine-glass"></i>
+                    <span class="quantity">4.5 cl </span>Tequila
+                  </li>
+                  <li class="ingredient">
+                    <i class="fa-solid fa-wine-glass"></i>
+                    <span class="quantity">1.5 cl </span>Lime Juice
+                  </li>
+                  <li class="ingredient">
+                    <i class="fa-solid fa-wine-glass"></i>
+                    <span class="quantity">1 </span>Agave syrup
+                  </li>
+                  <li class="ingredient">
+                    <i class="fa-solid fa-wine-glass"></i>
+                    <span class="quantity">4.5 cl </span>Tequila
+                  </li>
+                  <li class="ingredient">
+                    <i class="fa-solid fa-wine-glass"></i>
+                    <span class="quantity"></span>Lime Juice
+                  </li>
+                </ul>
+              </div>
+              <p class="info-title instructions">INSTRUCTIONS</p>
+              <ol>
+                <li class="instruction-text">
+                  Rub rim of cocktail glass with lime juice. Dip rim in coarse
+                  salt. Shake tequila, blue curacao, and lime juice with ice,
+                  strain into the salt-rimmed glass, and serve
+                </li>
+              </ol>
+            </div>
+          </div> -->
+        </div>
+      </main>
+    </div>
   </body>
 </html>

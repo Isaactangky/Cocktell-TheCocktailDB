@@ -9,10 +9,7 @@ class ResultView extends View {
       .join("");
   }
   _generatePreviewMarkup(data) {
-    console.log("1");
     const id = window.location.hash.slice(1);
-    console.log("data", data);
-    console.log(id);
     return `
       <li class="preview" data-id=${data.id}>
         <a class="preview-link ${
