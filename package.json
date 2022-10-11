@@ -1,0 +1,28 @@
+{
+  "name": "cocktell-cotaildb",
+  "version": "1.0.0",
+  "description": "Application to search cocktail recipe",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Isaactangky/Cocktell-TheCocktailDB.git"
+  },
+  "author": "Isaac Tang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Isaactangky/Cocktell-TheCocktailDB/issues"
+  },
+  "homepage": "https://github.com/Isaactangky/Cocktell-TheCocktailDB#readme",
+  "dependencies": {
+    "axios": "^1.1.2",
+    "parcel": "^2.7.0"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
+  }
+}

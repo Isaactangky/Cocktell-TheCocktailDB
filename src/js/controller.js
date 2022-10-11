@@ -1,5 +1,6 @@
 import * as model from "./model.js";
 import loaderView from "./views/loaderView.js";
+import paginationView from "./views/paginationView.js";
 import recipeView from "./views/recipeView.js";
 import resultsView from "./views/resultsView.js";
 import searchMessageView from "./views/searchMessageView.js";
@@ -11,6 +12,7 @@ const controlLoadRandomRecipes = async function () {
 
     await model.loadRandomRecipes();
     resultsView.render(model.state.search.results);
+    paginationView.render(model.state.search);
   } catch (error) {
     resultsView.renderError();
   }
@@ -20,11 +22,13 @@ const controlLoadRandomRecipes = async function () {
 const controlLoadSearchResults = async function () {
   try {
     const query = searchView.getQuery();
+    const queryType = searchView.getSearchOption();
     if (!query) return;
     loaderView.show();
-    await model.loadSearchResults(query);
-    resultsView.render(model.state.search.results);
+    await model.loadSearchResults(query, queryType);
+    resultsView.render(model.getSearchResultsPage(1));
     searchMessageView.render(model.state.search.query);
+    paginationView.render(model.state.search);
   } catch (error) {
     resultsView.renderError(error);
   }
@@ -35,7 +39,7 @@ const controlLoadRecipe = async function () {
     const id = window.location.hash.slice(1);
     if (!id) return;
     loaderView.show();
-    resultsView.update(model.state.search.results);
+    resultsView.update(model.getSearchResultsPage());
 
     await model.loadRecipe(id);
     recipeView.render(model.state.recipe);
@@ -44,7 +48,12 @@ const controlLoadRecipe = async function () {
   }
   loaderView.hide();
 };
+const controlPagination = function (newPage) {
+  resultsView.render(model.getSearchResultsPage(newPage));
+  paginationView.render(model.state.search);
+};
 
 searchView.addHandlerSearchFrom(controlLoadSearchResults);
 recipeView.addHandlerLoadRecipe(controlLoadRecipe);
+paginationView.addHandlerPagination(controlPagination);
 controlLoadRandomRecipes().then(() => {});

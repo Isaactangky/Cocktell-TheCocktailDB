@@ -6,6 +6,12 @@ class SearchView {
     this._clearSearchField();
     return query;
   }
+  getSearchOption() {
+    const type = this._container.querySelector(
+      'input[name="search-option"]:checked'
+    ).value;
+    return type;
+  }
   _clearSearchField() {
     this._container.querySelector(".search-input").value = "";
   }

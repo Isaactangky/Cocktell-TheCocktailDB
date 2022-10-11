@@ -26,17 +26,40 @@
     <div class="page-wrapper">
       <header>
         <!-- TODO redirect to home page -->
-        <a class="logo-container" href="./">
-          <img src="img/logo-blue-2.png" alt="Logo" class="logo" />
-          <p class="app-name">Cocktell</p>
-        </a>
+        <div class="logo-container">
+          <a class="logo-link" href="./">
+            <img src="img/logo-blue-2.png" alt="Logo" class="logo" />
+            <p class="app-name">Cocktell</p>
+          </a>
+        </div>
 
         <form action="" class="search-form">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search cocktail"
-          />
+          <div class="search-options-input">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search cocktail"
+            />
+
+            <div class="search-options">
+              <p class="search-by">Seach by:</p>
+              <input
+                type="radio"
+                name="search-option"
+                id="cocktail"
+                value="cocktail"
+                checked
+              />
+              <label for="cocktail">Cocktail</label>
+              <input
+                type="radio"
+                name="search-option"
+                id="ingredient"
+                value="ingredient"
+              />
+              <label for="ingredient">Ingredient</label>
+            </div>
+          </div>
           <button class="search-btn">Search</button>
         </form>
         <div class="loader hidden">
@@ -76,6 +99,22 @@
             </a>
           </li> -->
           </ul>
+          <div class="pagination">
+            <!-- <button
+              data-goto="${curPage + 1}"
+              class="pagination-btn pagination-btn-prev"
+            >
+              <i class="fa-solid fa-caret-left"></i>
+              <span>Page 0</span>
+            </button>
+            <button
+              data-goto="${curPage - 1}"
+              class="pagination-btn pagination-btn-next"
+            >
+              <span>Page 1</span>
+              <i class="fa-solid fa-caret-right"></i>
+            </button> -->
+          </div>
           <footer>
             <p>© Copyright by Isaac Tang</p>
           </footer>
