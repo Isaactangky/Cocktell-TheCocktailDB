@@ -2,7 +2,11 @@ import View from "./view.js";
 import PreviewView from "./previewView.js";
 class ResultView extends View {
   _container = document.querySelector(".preview-container");
-  _errorMessage = "Cannot find recipes.";
+  _errorMessage = "";
+
+  renderError() {
+    this._clear();
+  }
   _generateMarkups() {
     return this._data
       .map((result) => this._generatePreviewMarkup(result))

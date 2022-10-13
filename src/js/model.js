@@ -1,4 +1,10 @@
-import { API_LINK, NUM_RANDOM_DRINKS, RECIPES_PER_PAGE } from "./config.js";
+import {
+  API_LINK,
+  NUM_RANDOM_DRINKS,
+  NUM_SIMILAR_DRINK,
+  RECIPES_PER_PAGE,
+  RANDOM_POOL,
+} from "./config.js";
 import { AJAX } from "./helper.js";
 export const state = {
   search: {
@@ -7,8 +13,11 @@ export const state = {
     results: [],
     page: 1,
     recipesPerPage: RECIPES_PER_PAGE,
+    numPages: 1,
   },
   recipe: {},
+  similarDrinks: [],
+  randomRecipe: {},
   bookmarks: [],
 };
 
@@ -24,27 +33,17 @@ const formatIngredients = function (drink) {
   return arrIng;
 };
 const formatDrink = function (drink, preview = true) {
-  // Partial data for preview
-  if (preview) {
-    return {
-      id: drink.idDrink,
-      name: drink.strDrink,
-      imgSrc: `${drink.strDrinkThumb}/preview`,
-    };
-  }
-  // Full data for recipe
-  const ingredients = formatIngredients(drink);
   return {
     id: drink.idDrink,
     name: drink.strDrink,
-    category: drink.strCategory,
-    imgSrc: drink.strDrinkThumb,
-    glass: drink.strGlass,
-    IBA: drink.strIBA,
-    alcoholic: drink.strAlcoholic,
-    ingredients,
+    imgSrc: `${drink.strDrinkThumb}${preview ? "/preview" : ""}`,
+    ...(drink.strCategory && { category: drink.strCategory }),
+    ...(drink.strGlass && { glass: drink.strGlass }),
+    ...(drink.strIBA && { IBA: drink.strIBA }),
+    ...(drink.strAlcoholic && { alcoholic: drink.strAlcoholic }),
     // TODO reformat instructions
-    instructions: drink.strInstructions.split(".").filter((ele) => ele !== ""),
+    ...(drink.strInstructions && { instructions: drink.strInstructions }),
+    ...(!preview && { ingredients: formatIngredients(drink) }),
   };
 };
 export const loadSearchResults = async function (query, queryType) {
@@ -58,6 +57,9 @@ export const loadSearchResults = async function (query, queryType) {
     state.search.query = query;
     state.search.type = queryType;
     state.search.results = drinks.map((drink) => formatDrink(drink));
+    state.search.numPages = Math.ceil(
+      state.search.results.length / state.search.recipesPerPage
+    );
   } catch (error) {
     throw error;
   }
@@ -76,20 +78,27 @@ const getLocalStorage = function () {
   const history = JSON.parse(localStorage.getItem("recommendations"));
   return history;
 };
+export const load1RandomRecipe = async function (preview = true) {
+  try {
+    const { drinks } = await AJAX(`${API_LINK}random.php`);
+    if (!drinks) throw new Error(":(  Fail to shake cocktail");
+    state.randomRecipe = formatDrink(drinks[0], preview);
+  } catch (error) {
+    throw error;
+  }
+};
 export const loadRandomRecipes = async function () {
   try {
     const history = getLocalStorage();
     // if date changes or no local storage, get random recipes
     if (
       !history ||
-      history.date !== `${new Date().getDate()}/${new Date().getMonth()}`
+      history.date !== `${new Date().getDate()}/${new Date().getMonth()}` ||
+      history.randomRecipes.length !== NUM_RANDOM_DRINKS
     ) {
       for (let i = 0; i < NUM_RANDOM_DRINKS; i++) {
-        const { drinks } = await AJAX(`${API_LINK}random.php`);
-        if (!drinks)
-          throw new Error(":(  No cocktail found, please try another keyword");
-        const drink = formatDrink(drinks[0]);
-        state.search.results.push(drink);
+        await load1RandomRecipe();
+        state.search.results.push(state.randomRecipe);
       }
       setLocalStorage();
     } else {
@@ -105,7 +114,7 @@ export const loadRecipe = async function (id) {
   try {
     const { drinks } = await AJAX(`${API_LINK}lookup.php?i=${id}`);
     state.recipe = formatDrink(drinks[0], false);
-    console.log(state.recipe);
+    // console.log(state.recipe);
   } catch (error) {
     throw error;
   }
@@ -115,4 +124,41 @@ export const getSearchResultsPage = function (page = state.search.page) {
   const pageStart = (page - 1) * state.search.recipesPerPage;
   const pageEnd = page * state.search.recipesPerPage;
   return state.search.results.slice(pageStart, pageEnd);
+};
+export const generateSimilarDrinks = async function () {
+  try {
+    const endpoint = "filter.php?i=";
+    const ingredients = state.recipe.ingredients.map((e) => e[0]);
+    // console.log(ingredients);
+    state.similarDrinks = [];
+    while (state.similarDrinks.length < NUM_SIMILAR_DRINK) {
+      const ing = ingredients[Math.floor(Math.random() * ingredients.length)];
+      // console.log("ing", ing);
+      const { drinks } = await AJAX(`${API_LINK}${endpoint}${ing}`);
+      // console.log("drinks", drinks);
+      if (!drinks) continue;
+      // select (drinks.length / RANDOM POOL) drinks
+      const num_drinks = Math.ceil(drinks.length / RANDOM_POOL);
+
+      let count = 0;
+      while (
+        count < num_drinks &&
+        state.similarDrinks.length < NUM_SIMILAR_DRINK
+      ) {
+        const drink = drinks[Math.floor(Math.random() * drinks.length)];
+        // console.log("drink", drink);
+        if (
+          !state.similarDrinks.find((d) => d.id === drink.idDrink) &&
+          drink.idDrink !== state.recipe.id
+        ) {
+          state.similarDrinks.push(formatDrink(drink, true));
+          count++;
+        }
+      }
+
+      // console.log("siml", state.similarDrinks);
+    }
+  } catch (error) {
+    throw error;
+  }
 };

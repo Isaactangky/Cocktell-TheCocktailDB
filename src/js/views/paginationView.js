@@ -14,9 +14,10 @@ class PaginationView extends View {
   }
   _generateMarkups() {
     const curPage = this._data.page;
-    const maxPage = Math.ceil(
-      this._data.results.length / this._data.recipesPerPage
-    );
+    // const maxPage = Math.ceil(
+    //   this._data.results.length / this._data.recipesPerPage
+    // );
+    const pageNum = `<div class="page-num">${curPage}-${this._data.numPages}</div>`;
     const prevPageBtn = `
       <button data-goto="${
         curPage - 1
@@ -33,14 +34,14 @@ class PaginationView extends View {
         <i class="fa-solid fa-caret-right"></i>
       </button>
     `;
-    if (curPage === 1 && maxPage > 1) {
-      return nextPageBtn;
+    if (curPage === 1 && this._data.numPages > 1) {
+      return `${pageNum}${nextPageBtn}`;
     }
-    if (curPage === maxPage && maxPage > 1) {
-      return prevPageBtn;
+    if (curPage === this._data.numPages && this._data.numPages > 1) {
+      return `${prevPageBtn}${pageNum}`;
     }
-    if (curPage < maxPage) {
-      return `${prevPageBtn}${nextPageBtn}`;
+    if (curPage < this._data.numPages) {
+      return `${prevPageBtn}${pageNum}${nextPageBtn}`;
     }
     return "";
   }

@@ -24,22 +24,25 @@
   </head>
   <body>
     <div class="page-wrapper">
+      <div class="overlay hidden"></div>
       <header>
         <!-- TODO redirect to home page -->
         <div class="logo-container">
           <a class="logo-link" href="./">
             <img src="img/logo-blue-2.png" alt="Logo" class="logo" />
-            <p class="app-name">Cocktell</p>
+            <p class="app">Cocktell</p>
           </a>
         </div>
-
         <form action="" class="search-form">
           <div class="search-options-input">
-            <input
-              type="text"
-              class="search-input"
-              placeholder="Search cocktail"
-            />
+            <div class="search-field">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Search cocktail"
+              />
+              <button class="search-btn">Search</button>
+            </div>
 
             <div class="search-options">
               <p class="search-by">Seach by:</p>
@@ -60,8 +63,10 @@
               <label for="ingredient">Ingredient</label>
             </div>
           </div>
-          <button class="search-btn">Search</button>
         </form>
+        <div class="other-functions">
+          <button class="random-cocktail-btn">Shack A Cocktail</button>
+        </div>
         <div class="loader hidden">
           <div class="a"></div>
           <div class="b"></div>
@@ -70,6 +75,9 @@
       <!-- <div class="loader" style="display: none"> -->
 
       <main>
+        <div class="menu-bar">
+          <i class="fa-solid fa-bars"></i>
+        </div>
         <div class="search-results">
           <div class="search-title-container">
             <p class="search-title">Cocktails of the Day</p>
@@ -107,6 +115,7 @@
               <i class="fa-solid fa-caret-left"></i>
               <span>Page 0</span>
             </button>
+            
             <button
               data-goto="${curPage - 1}"
               class="pagination-btn pagination-btn-next"
@@ -177,13 +186,15 @@
                 </ul>
               </div>
               <p class="info-title instructions">INSTRUCTIONS</p>
-              <ol>
-                <li class="instruction-text">
+              <div class="instructions">
+                <p class="instruction-text">
                   Rub rim of cocktail glass with lime juice. Dip rim in coarse
                   salt. Shake tequila, blue curacao, and lime juice with ice,
                   strain into the salt-rimmed glass, and serve
-                </li>
-              </ol>
+                </p>
+              </div>
+              <ul class="similar-drinks-container">
+              </ul>
             </div>
           </div> -->
         </div>

@@ -8,7 +8,7 @@ class RecipeView extends View {
     <div class="recipe-header">
       <img
         src=${this._data.imgSrc}
-        alt="cocktail image"
+        alt="${this._data.name} image"
         class="cocktail-img"
       />
       <h2 class="recipe-cocktail-title">${this._data.name}</h2>
@@ -20,9 +20,13 @@ class RecipeView extends View {
         ${this._generateIngredientsMarkup()}
 
         <p class="info-title instructions">INSTRUCTIONS</p>
-        <ol>
+        <div class="instructions">
           ${this._generateInstructionsMarkup()}
-        </ol>
+        </div>
+        <div class="similar-drinks">
+          <p class="similar-drink-title">Similar Drinks: </p>
+          <ul class="similar-drinks-container"></ul>
+        </div>
       </div>
     </div>`;
     return html;
@@ -53,12 +57,7 @@ class RecipeView extends View {
       </ul>`;
   }
   _generateInstructionsMarkup() {
-    return this._data.instructions
-      .map(
-        (instruction) =>
-          `<li class="instruction-text">${instruction + "."}</li>`
-      )
-      .join("");
+    return `<p class="instruction-text">${this._data.instructions}</p>`;
   }
   _generateIngredientsMarkup() {
     const ingredientLi = this._data.ingredients

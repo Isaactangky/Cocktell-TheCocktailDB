@@ -15,7 +15,8 @@ export const AJAX = async function (url, params = {}) {
     const res = await axios.get(url, params);
     // const res = await fetch(url);
     const { data } = res;
-    if (res.status !== 200 || !data)
+    // if (res.status !== 200 || !data)
+    if (res.status !== 200)
       throw new Error("Cannot find receipt, please try again");
     return data;
   } catch (err) {
