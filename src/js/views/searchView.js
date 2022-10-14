@@ -8,7 +8,7 @@ class SearchView {
   }
   getSearchOption() {
     const type = this._container.querySelector(
-      'input[name="search-option"]:checked'
+      'input[name="search-options"]:checked'
     ).value;
     return type;
   }

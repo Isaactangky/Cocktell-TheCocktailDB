@@ -16,7 +16,7 @@ class ResultView extends View {
     const id = window.location.hash.slice(1);
     return `
       <li class="preview" data-id=${data.id}>
-        <a class="preview-link ${
+        <a class="preview-link btn-light ${
           Number(data.id) === Number(id) ? "preview-active" : ""
         }" href="#${data.id}">
           <img

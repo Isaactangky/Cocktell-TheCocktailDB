@@ -5,9 +5,8 @@ class MenuView extends View {
   render() {}
   _generateMarkup() {}
   addHandlerClick() {
-    const bar = document.querySelector(".menu-bar");
-    console.log(bar);
-    bar.addEventListener("click", () => {
+    const menuIcon = document.querySelector(".menu-icon");
+    menuIcon.addEventListener("click", () => {
       this._container.classList.add("active");
       document.querySelector(".overlay").classList.remove("hidden");
     });

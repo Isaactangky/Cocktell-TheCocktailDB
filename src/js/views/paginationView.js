@@ -21,7 +21,7 @@ class PaginationView extends View {
     const prevPageBtn = `
       <button data-goto="${
         curPage - 1
-      }" class="pagination-btn pagination-btn-prev">
+      }" class="pagination-btn pagination-btn-prev btn-light">
         <i class="fa-solid fa-caret-left"></i>
         <span>Page ${curPage - 1}</span>
       </button>
@@ -29,7 +29,7 @@ class PaginationView extends View {
     const nextPageBtn = `
       <button data-goto="${
         curPage + 1
-      }" class="pagination-btn pagination-btn-next">
+      }" class="pagination-btn pagination-btn-next btn-light">
         <span>Page ${curPage + 1}</span>
         <i class="fa-solid fa-caret-right"></i>
       </button>

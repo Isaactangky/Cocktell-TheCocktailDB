@@ -34,38 +34,38 @@
           </a>
         </div>
         <form action="" class="search-form">
-          <div class="search-options-input">
-            <div class="search-field">
-              <input
-                type="text"
-                class="search-input"
-                placeholder="Search cocktail"
-              />
-              <button class="search-btn">Search</button>
-            </div>
-
-            <div class="search-options">
-              <p class="search-by">Seach by:</p>
-              <input
-                type="radio"
-                name="search-option"
-                id="cocktail"
-                value="cocktail"
-                checked
-              />
-              <label for="cocktail">Cocktail</label>
-              <input
-                type="radio"
-                name="search-option"
-                id="ingredient"
-                value="ingredient"
-              />
-              <label for="ingredient">Ingredient</label>
-            </div>
+          <!-- <div class="search-input-options"> -->
+          <div class="search-field">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search cocktail"
+            />
+            <button class="search-btn btn-dark">Search</button>
           </div>
+
+          <div class="search-options">
+            <p id="search-by">Seach by:</p>
+            <input
+              type="radio"
+              name="search-options"
+              id="search-option-cocktail"
+              value="cocktail"
+              checked
+            />
+            <label for="search-option-cocktail">Cocktail</label>
+            <input
+              type="radio"
+              name="search-options"
+              id="search-option-ingredient"
+              value="ingredient"
+            />
+            <label for="search-option-ingredient">Ingredient</label>
+          </div>
+          <!-- </div> -->
         </form>
         <div class="other-functions">
-          <button class="random-cocktail-btn">Shack A Cocktail</button>
+          <button class="random-cocktail-btn btn-dark">Shack A Cocktail</button>
         </div>
         <div class="loader hidden">
           <div class="a"></div>
@@ -75,7 +75,7 @@
       <!-- <div class="loader" style="display: none"> -->
 
       <main>
-        <div class="menu-bar">
+        <div class="menu-icon btn-dark">
           <i class="fa-solid fa-bars"></i>
         </div>
         <div class="search-results">
@@ -131,7 +131,7 @@
         <div class="recipe-container">
           <div class="welcome-message-container">
             <p id="welcome-message">
-              Welcome! Start by searching for a recipe or selcting today's
+              Welcome! Start by searching for a recipe or checking today's
               recommendations.
             </p>
           </div>
