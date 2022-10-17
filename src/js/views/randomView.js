@@ -6,7 +6,6 @@ class RandomView {
     this._container
       .querySelector(".random-cocktail-btn")
       .addEventListener("click", (e) => {
-        // e.preventDefault();
         handler();
       });
   }

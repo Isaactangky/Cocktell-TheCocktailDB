@@ -1,10 +1,10 @@
 import View from "./view.js";
 class SimilarDrink extends View {
-  _container = document.querySelector(".similar-drinks-container");
+  _container = document.querySelector(".similar-drinks-list");
   _errorMessage = "Cannot load similar drink recipes.";
 
   _generateMarkups() {
-    this._container = document.querySelector(".similar-drinks-container");
+    // this._container = document.querySelector(".similar-drinks-container");
     return this._data
       .map((recipe) => {
         // console.log(recipe);

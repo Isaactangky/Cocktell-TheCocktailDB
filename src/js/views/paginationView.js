@@ -1,5 +1,4 @@
 import View from "./view.js";
-import PreviewView from "./previewView.js";
 class PaginationView extends View {
   _container = document.querySelector(".pagination");
   _errorMessage = "Fail rendering pagination.";
@@ -14,9 +13,7 @@ class PaginationView extends View {
   }
   _generateMarkups() {
     const curPage = this._data.page;
-    // const maxPage = Math.ceil(
-    //   this._data.results.length / this._data.recipesPerPage
-    // );
+
     const pageNum = `<div class="page-num">${curPage}-${this._data.numPages}</div>`;
     const prevPageBtn = `
       <button data-goto="${

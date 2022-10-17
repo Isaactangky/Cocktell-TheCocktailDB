@@ -9,13 +9,18 @@
   --color-primary-light-1: #00b4d8;
   --color-primary-light-2: #90e0ef;
   --color-primary-light-3: #caf0f8;
-
+  --linear-gradient-body: linear-gradient(
+    to bottom right,
+    var(--color-primary-light-3),
+    var(--color-primary-light-1)
+  );
   --column-width-page-wrapper: 20rem;
   --column-width-recipe-view: 15rem;
   --padding-side-menu: 0.5rem 1.5rem;
   --padding-recipe-category: 3rem 2rem;
-  --padding-header: 1rem 0rem;
-  --padding-recipe-main: 3rem 4rem;
+  --padding-header: 1rem 0 1.5rem 0;
+  --padding-recipe-main-LR: 4rem;
+  --padding-recipe-main: 3rem var(--padding-recipe-main-LR);
 }
 * {
   box-sizing: border-box;
@@ -47,11 +52,7 @@ body {
   font-size: 62.5%;
 
   padding: 5%;
-  background: linear-gradient(
-    to bottom right,
-    var(--color-primary-light-3),
-    var(--color-primary-light-1)
-  );
+  background: var(--linear-gradient-body);
 }
 /* ///////////////////////////////////////////////////////////////////////////// */
 
@@ -59,17 +60,18 @@ body {
   background-color: white;
   width: 100%;
   height: 100vh;
-  opacity: 0.1;
-  position: absolute;
+  opacity: 0.2;
+  position: fixed;
   left: 0;
   top: 0;
   z-index: 5;
   /* display: none; */
 }
 .page-wrapper {
+  height: auto;
   min-height: 60rem;
   display: grid;
-  grid-template-rows: 6rem 1fr;
+  grid-template-rows: auto 1fr;
 
   border-radius: 15px;
   overflow: hidden;
@@ -247,6 +249,7 @@ header {
 
 /* Main Section  */
 main {
+  position: relative;
   grid-column: 1/3;
   /* margin-top: 1rem; */
   /* min-height: 60rem; */
@@ -264,14 +267,18 @@ main {
   top: 0;
   z-index: 10;
   cursor: pointer;
-  display: none;
+  /* display: none; */
+  transform: translateX(-105%);
+  transition: transform 1s ease;
 }
 .menu-icon:hover {
   background-color: var(--color-primary-light-3);
   color: var(--color-primary-dark-1);
 }
 .side-menu {
+  grid-row: 1/2;
   height: 100%;
+
   background-color: var(--color-primary-light-3);
   position: relative;
   display: flex;
@@ -374,7 +381,14 @@ footer {
   width: 40%;
   margin: 4rem auto;
 }
+.recipe-wrapper {
+  grid-column: 2/3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .recipe-container {
+  flex-grow: 1;
   display: grid;
   grid-template-rows: var(--column-width-recipe-view) auto;
 }
@@ -426,7 +440,9 @@ footer {
 }
 
 /* Recipe Main  */
+
 .recipe-main {
+  /* padding: var(--padding-recipe-main); */
   padding: var(--padding-recipe-main);
   display: flex;
   flex-direction: column;
@@ -471,16 +487,23 @@ ul.ingredients {
 }
 /* Similar Drinks  */
 .similar-drinks {
-  margin-top: auto;
+  display: grid;
+  grid-template-columns: var(--column-width-recipe-view) 1fr;
 }
-.similar-drinks-container {
-  height: 5rem;
+
+.similar-drinks-box {
+  background-color: var(--color-primary-dark-1);
+}
+.similar-drinks-list {
+  padding: 0 var(--padding-recipe-main-LR) 2rem;
+  min-height: 6rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 .preview-similar-drink {
   color: var(--color-primary-dark-1);
+  background-color: var(--color-primary-light-3);
   height: 2rem;
   border-radius: 15px;
   border: 1px solid var(--color-primary-light-1);
@@ -488,6 +511,7 @@ ul.ingredients {
 }
 
 .similar-drink-title {
+  padding: 1rem var(--padding-recipe-main-LR) 0;
   font-size: 1rem;
   margin: 3rem 0 1rem 0;
 }
@@ -528,7 +552,8 @@ ul.ingredients {
 
     --padding-side-menu: 0.5rem 1rem;
     --padding-recipe-category: 3rem 1.5rem;
-    --padding-recipe-main: 3rem 3.5rem;
+    --padding-recipe-main-LR: 3.5rem;
+    --padding-recipe-main: 3rem var(--padding-recipe-main-LR);
   }
   body {
     padding: 0;
@@ -540,32 +565,101 @@ ul.ingredients {
     display: none;
   }
 }
+
 @media (max-width: 850px) {
-  main {
-    position: relative;
-  }
-  .menu-icon,
   .overlay {
     display: block;
   }
+
   .side-menu {
     width: var(--column-width-page-wrapper);
-    box-shadow: 1px 1px 2px 1px var(--color-primary-dark-1);
+    box-shadow: 0px 1px 3px 0px var(--color-primary-dark-1);
     position: absolute;
     left: 0;
     top: 0;
     z-index: 10;
-
     transform: translateX(-105%);
     transition: transform 1s ease;
   }
-  .side-menu.active {
+  .active {
     transform: translateX(0%);
   }
-  .recipe-container {
+  .recipe-wrapper {
     grid-column: 1/3;
   }
   .hidden {
     display: none;
+  }
+}
+@media (max-width: 750px) {
+  :root {
+    --padding-header: 1rem 0rem 1.5rem;
+  }
+  header {
+    background: var(--linear-gradient-body);
+    grid-template-columns: 25rem;
+    justify-content: center;
+    row-gap: 1rem;
+  }
+  .logo-container {
+    padding-left: 0;
+  }
+  .logo-link {
+    margin: auto;
+  }
+
+  .other-functions {
+    margin-top: 1rem;
+  }
+}
+@media (max-width: 510px) {
+  :root {
+    --column-width-recipe-view: 10rem;
+    --font-size-recipe-title: 1.8rem;
+    --padding-recipe-category: 1rem;
+    --padding-recipe-main-LR: 3rem;
+    --padding-recipe-main: 3rem var(--padding-recipe-main-LR);
+  }
+  .recipe-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe-category {
+    /* height: 100%; */
+    font-weight: 500;
+    padding: var(--padding-recipe-category);
+    border-top: 1px solid var(--color-primary-dark-2);
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .category {
+    margin-bottom: 0;
+  }
+  .category-text {
+    font-size: 90%;
+  }
+  .similar-drinks {
+    background-color: var(--color-primary-dark-1);
+    grid-template-columns: 1fr;
+  }
+
+  .similar-drinks-box {
+    display: none;
+  }
+  .similar-drink-title {
+    color: var(--color-primary-light-3);
+  }
+}
+@media (max-width: 440px) {
+  /* .search-form {
+    width: 18rem;
+  } */
+  header {
+    grid-template-columns: 18rem;
+    justify-content: center;
+    row-gap: 1rem;
   }
 }

@@ -14,12 +14,12 @@ class MenuView extends View {
   show() {
     this._container.classList.add("active");
     this._overlay.classList.remove("hidden");
-    this._menuIcon.classList.add("hidden");
+    this._menuIcon.classList.remove("active");
   }
   hide() {
     this._container.classList.remove("active");
     this._overlay.classList.add("hidden");
-    this._menuIcon.classList.remove("hidden");
+    this._menuIcon.classList.add("active");
   }
 }
 

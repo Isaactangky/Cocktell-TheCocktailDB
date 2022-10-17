@@ -4,7 +4,7 @@ class RecipeView extends View {
   _errorMessage = "Cannot load recipe.";
 
   _generateMarkups() {
-    const html = `        
+    return `        
     <div class="recipe-header">
       <img
         src=${this._data.imgSrc}
@@ -23,13 +23,9 @@ class RecipeView extends View {
         <div class="instructions">
           ${this._generateInstructionsMarkup()}
         </div>
-        <div class="similar-drinks">
-          <p class="similar-drink-title">Similar Drinks: </p>
-          <ul class="similar-drinks-container"></ul>
-        </div>
+        
       </div>
     </div>`;
-    return html;
   }
 
   addHandlerLoadRecipe(handler) {

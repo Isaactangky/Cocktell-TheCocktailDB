@@ -26,7 +26,6 @@
     <div class="page-wrapper">
       <div class="overlay hidden"></div>
       <header>
-        <!-- TODO redirect to home page -->
         <div class="logo-container">
           <a class="logo-link" href="./">
             <img src="img/logo-blue-2.png" alt="Logo" class="logo" />
@@ -75,7 +74,7 @@
       <!-- <div class="loader" style="display: none"> -->
 
       <main>
-        <div class="menu-icon btn-dark">
+        <div class="menu-icon btn-dark active">
           <i class="fa-solid fa-bars"></i>
         </div>
         <div class="side-menu">
@@ -128,14 +127,15 @@
             <p>© Copyright by Isaac Tang</p>
           </footer>
         </div>
-        <div class="recipe-container">
-          <div class="welcome-message-container">
-            <p id="welcome-message">
-              Welcome! Start by searching for a recipe or checking today's
-              recommendations.
-            </p>
-          </div>
-          <!-- <div class="recipe-header">
+        <div class="recipe-wrapper">
+          <div class="recipe-container">
+            <div class="welcome-message-container">
+              <p id="welcome-message">
+                Welcome! Start by searching for a recipe or checking today's
+                recommendations.
+              </p>
+            </div>
+            <!-- <div class="recipe-header">
             <img
               src="https://www.thecocktaildb.com/images/media/drink/loezxn1504373874.jpg"
               alt="cocktail image"
@@ -193,10 +193,17 @@
                   strain into the salt-rimmed glass, and serve
                 </p>
               </div>
-              <ul class="similar-drinks-container">
-              </ul>
+              
             </div>
           </div> -->
+          </div>
+          <div class="similar-drinks">
+            <div class="similar-drinks-box"></div>
+            <div calss="similar-drinks-container">
+              <p class="similar-drink-title">Similar Drinks:</p>
+              <ul class="similar-drinks-list"></ul>
+            </div>
+          </div>
         </div>
       </main>
     </div>

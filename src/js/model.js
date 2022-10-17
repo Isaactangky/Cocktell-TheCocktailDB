@@ -93,7 +93,7 @@ export const load1RandomRecipe = async function (preview = true) {
 export const loadRandomRecipes = async function () {
   try {
     const history = getLocalStorage();
-    // if date changes or no local storage, get random recipes
+    // if date changes or no local storage, get random recipes from api
     if (
       !history ||
       history.date !== `${new Date().getDate()}/${new Date().getMonth()}` ||

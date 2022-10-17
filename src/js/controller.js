@@ -47,6 +47,7 @@ const controlLoadSearchResults = async function () {
     resultsView.renderError();
     searchMessageView.renderError();
   }
+  // menuView.show();
   loaderView.hide();
 };
 const controlLoadRecipe = async function () {
