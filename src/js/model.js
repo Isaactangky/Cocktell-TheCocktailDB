@@ -4,8 +4,10 @@ import {
   NUM_SIMILAR_DRINK,
   RECIPES_PER_PAGE,
   RANDOM_POOL,
+  MAX_API_CALL,
+  MAX_LOOP,
 } from "./config.js";
-import { AJAX } from "./helper.js";
+import { AJAX, AJAXBatch } from "./helper.js";
 export const state = {
   search: {
     type: "",
@@ -18,6 +20,7 @@ export const state = {
   recipe: {},
   similarDrinks: [],
   randomRecipe: {},
+
   bookmarks: [],
 };
 
@@ -67,7 +70,6 @@ export const loadSearchResults = async function (query, queryType) {
 const setLocalStorage = function () {
   const date = new Date();
   const dateStr = `${date.getDate()}/${date.getMonth()}`;
-  console.log(dateStr);
   const recommendations = JSON.stringify({
     date: dateStr,
     randomRecipes: state.search.results,
@@ -83,6 +85,7 @@ export const load1RandomRecipe = async function (preview = true) {
     const { drinks } = await AJAX(`${API_LINK}random.php`);
     if (!drinks) throw new Error(":(  Fail to shake cocktail");
     state.randomRecipe = formatDrink(drinks[0], preview);
+    return state.randomRecipe;
   } catch (error) {
     throw error;
   }
@@ -96,10 +99,12 @@ export const loadRandomRecipes = async function () {
       history.date !== `${new Date().getDate()}/${new Date().getMonth()}` ||
       history.randomRecipes.length !== NUM_RANDOM_DRINKS
     ) {
-      for (let i = 0; i < NUM_RANDOM_DRINKS; i++) {
-        await load1RandomRecipe();
-        state.search.results.push(state.randomRecipe);
-      }
+      const drinksArray = await AJAXBatch(
+        NUM_RANDOM_DRINKS,
+        `${API_LINK}random.php`
+      );
+      const formatedDrinks = drinksArray.map((d) => formatDrink(d.drinks[0]));
+      state.search.results = formatedDrinks;
       setLocalStorage();
     } else {
       state.search.results = history.randomRecipes;
@@ -125,28 +130,39 @@ export const getSearchResultsPage = function (page = state.search.page) {
   const pageEnd = page * state.search.recipesPerPage;
   return state.search.results.slice(pageStart, pageEnd);
 };
+
 export const generateSimilarDrinks = async function () {
   try {
     const endpoint = "filter.php?i=";
     const ingredients = state.recipe.ingredients.map((e) => e[0]);
-    // console.log(ingredients);
     state.similarDrinks = [];
-    while (state.similarDrinks.length < NUM_SIMILAR_DRINK) {
-      const ing = ingredients[Math.floor(Math.random() * ingredients.length)];
-      // console.log("ing", ing);
-      const { drinks } = await AJAX(`${API_LINK}${endpoint}${ing}`);
-      // console.log("drinks", drinks);
-      if (!drinks) continue;
-      // select (drinks.length / RANDOM POOL) drinks
-      const num_drinks = Math.ceil(drinks.length / RANDOM_POOL);
+    let numCalls = 0;
 
+    while (
+      state.similarDrinks.length < NUM_SIMILAR_DRINK &&
+      numCalls < MAX_API_CALL
+    ) {
+      // 1) randomly choose an ingredient
+      const ing = ingredients[Math.floor(Math.random() * ingredients.length)];
+      numCalls++;
+      // 2) search by ingredient
+      const { drinks } = await AJAX(`${API_LINK}${endpoint}${ing}`);
+
+      if (!drinks || drinks.length <= 1) continue;
+      // 3) select (drinks.length / RANDOM POOL) drinks
+      const num_drinks = Math.ceil(drinks.length / RANDOM_POOL);
       let count = 0;
-      while (
-        count < num_drinks &&
-        state.similarDrinks.length < NUM_SIMILAR_DRINK
-      ) {
+      // 4) MAX_LOOP: there may not be enough drinks to make count >= num_drinks
+      //    break the loop if there is not enough drinks in the pool
+      //    and make another api call
+      for (let i = 0; i < MAX_LOOP; i++) {
+        if (
+          count >= num_drinks ||
+          state.similarDrinks.length >= NUM_SIMILAR_DRINK
+        )
+          break;
+        // 5) Select one new drink from the results
         const drink = drinks[Math.floor(Math.random() * drinks.length)];
-        // console.log("drink", drink);
         if (
           !state.similarDrinks.find((d) => d.id === drink.idDrink) &&
           drink.idDrink !== state.recipe.id
@@ -155,8 +171,6 @@ export const generateSimilarDrinks = async function () {
           count++;
         }
       }
-
-      // console.log("siml", state.similarDrinks);
     }
   } catch (error) {
     throw error;

@@ -12,7 +12,7 @@
 
   --column-width-page-wrapper: 20rem;
   --column-width-recipe-view: 15rem;
-  --padding-search-results: 0.5rem 1.5rem;
+  --padding-side-menu: 0.5rem 1.5rem;
   --padding-recipe-category: 3rem 2rem;
   --padding-header: 1rem 0rem;
   --padding-recipe-main: 3rem 4rem;
@@ -270,7 +270,7 @@ main {
   background-color: var(--color-primary-light-3);
   color: var(--color-primary-dark-1);
 }
-.search-results {
+.side-menu {
   height: 100%;
   background-color: var(--color-primary-light-3);
   position: relative;
@@ -280,7 +280,7 @@ main {
 .search-title-container,
 .preview,
 .pagination {
-  padding: var(--padding-search-results);
+  padding: var(--padding-side-menu);
 }
 
 .search-title {
@@ -474,8 +474,7 @@ ul.ingredients {
   margin-top: auto;
 }
 .similar-drinks-container {
-  /* justify-self: flex-end; */
-  /* margin-top: auto; */
+  height: 5rem;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -527,7 +526,7 @@ ul.ingredients {
     --font-size-recipe-title: 2.8rem;
     --font-size-preview-title: 0.9rem;
 
-    --padding-search-results: 0.5rem 1rem;
+    --padding-side-menu: 0.5rem 1rem;
     --padding-recipe-category: 3rem 1.5rem;
     --padding-recipe-main: 3rem 3.5rem;
   }
@@ -549,7 +548,7 @@ ul.ingredients {
   .overlay {
     display: block;
   }
-  .search-results {
+  .side-menu {
     width: var(--column-width-page-wrapper);
     box-shadow: 1px 1px 2px 1px var(--color-primary-dark-1);
     position: absolute;
@@ -560,7 +559,7 @@ ul.ingredients {
     transform: translateX(-105%);
     transition: transform 1s ease;
   }
-  .search-results.active {
+  .side-menu.active {
     transform: translateX(0%);
   }
   .recipe-container {

@@ -8,6 +8,7 @@ import searchMessageView from "./views/searchMessageView.js";
 import searchView from "./views/searchView.js";
 import menuView from "./views/menuView.js";
 import similarDrinksView from "./views/similarDrinksView.js";
+
 const controlLoadRandomRecipes = async function () {
   try {
     loaderView.show();
@@ -53,18 +54,20 @@ const controlLoadRecipe = async function () {
     const id = window.location.hash.slice(1);
     if (!id) return;
     loaderView.show();
-    recipeView.hide();
+    // recipeView.hide();
     resultsView.update(model.getSearchResultsPage());
 
     await model.loadRecipe(id);
     recipeView.render(model.state.recipe);
     await model.generateSimilarDrinks();
     similarDrinksView.render(model.state.similarDrinks);
+    // console.log("dfd");
+
     menuView.hide();
   } catch (error) {
     recipeView.renderError();
   }
-  recipeView.show();
+  // recipeView.show();
   loaderView.hide();
 };
 const controlPagination = function (newPage) {

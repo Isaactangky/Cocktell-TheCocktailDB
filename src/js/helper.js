@@ -12,6 +12,7 @@ const timeout = function (s) {
 export const AJAX = async function (url, params = {}) {
   try {
     // axios.get('https://www.thecocktaildb.com/api/json/v1/1/lookup.php', {
+
     const res = await axios.get(url, params);
     // const res = await fetch(url);
     const { data } = res;
@@ -19,6 +20,22 @@ export const AJAX = async function (url, params = {}) {
     if (res.status !== 200)
       throw new Error("Cannot find receipt, please try again");
     return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const AJAXBatch = async function (counts, url, params = {}) {
+  try {
+    const iterations = Array.from(Array(counts).keys());
+    // axios.get('https://www.thecocktaildb.com/api/json/v1/1/lookup.php', {
+    const response = await Promise.allSettled(
+      iterations.map(async (_) => await axios.get(url, params))
+    );
+    const dataArray = response
+      .filter((res) => res.status === "fulfilled")
+      .map((res) => res.value.data);
+    return dataArray;
   } catch (err) {
     throw err;
   }
