@@ -47,7 +47,7 @@ const controlLoadSearchResults = async function () {
     resultsView.renderError();
     searchMessageView.renderError();
   }
-  // menuView.show();
+  menuView.show();
   loaderView.hide();
 };
 const controlLoadRecipe = async function () {
@@ -62,21 +62,23 @@ const controlLoadRecipe = async function () {
     recipeView.render(model.state.recipe);
     await model.generateSimilarDrinks();
     similarDrinksView.render(model.state.similarDrinks);
-    // console.log("dfd");
-
     menuView.hide();
   } catch (error) {
+    console.log(error);
     recipeView.renderError();
   }
   // recipeView.show();
   loaderView.hide();
 };
+
 const controlPagination = function (newPage) {
   resultsView.render(model.getSearchResultsPage(newPage));
   paginationView.render(model.state.search);
 };
 const init = function () {
-  Promise.resolve(controlLoadRandomRecipes());
+  controlLoadRandomRecipes()
+    .then(() => menuView.show())
+    .catch((err) => resultsView.renderError());
   searchView.addHandlerSearchFrom(controlLoadSearchResults);
   recipeView.addHandlerLoadRecipe(controlLoadRecipe);
   paginationView.addHandlerPagination(controlPagination);

@@ -28,11 +28,10 @@ export const AJAX = async function (url, params = {}) {
 export const AJAXBatch = async function (url, paramsArr = [], paramsType) {
   try {
     const response = await Promise.allSettled(
-      paramsArr.map(
-        async (p) =>
-          await axios.get(url, {
-            params: paramsType ? { [paramsType]: p } : {},
-          })
+      paramsArr.map((p) =>
+        axios.get(url, {
+          params: paramsType ? { [paramsType]: p } : {},
+        })
       )
     );
     // get fulfiled response and non empty data

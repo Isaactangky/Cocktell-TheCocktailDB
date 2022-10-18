@@ -3,9 +3,6 @@ import {
   NUM_RANDOM_DRINKS,
   NUM_SIMILAR_DRINK,
   RECIPES_PER_PAGE,
-  RANDOM_POOL,
-  MAX_API_CALL,
-  MAX_LOOP,
 } from "./config.js";
 import { AJAX, AJAXBatch } from "./helper.js";
 export const state = {
@@ -20,7 +17,6 @@ export const state = {
   recipe: {},
   similarDrinks: [],
   randomRecipe: {},
-
   bookmarks: [],
 };
 

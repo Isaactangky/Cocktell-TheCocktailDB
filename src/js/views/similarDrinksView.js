@@ -1,16 +1,16 @@
 import View from "./view.js";
 class SimilarDrink extends View {
-  _container = document.querySelector(".similar-drinks-list");
+  _container = document.querySelector("div.similar-drinks-container");
   _errorMessage = "Cannot load similar drink recipes.";
 
   _generateMarkups() {
-    // this._container = document.querySelector(".similar-drinks-container");
-    return this._data
-      .map((recipe) => {
-        // console.log(recipe);
-        return this._generateDrinkMarkup(recipe);
-      })
-      .join("");
+    return `
+      <p class="similar-drink-title">Similar Drinks:</p>
+      <ul class="similar-drinks-list">
+        ${this._data
+          .map((recipe) => this._generateDrinkMarkup(recipe))
+          .join("")}
+      </ul>`;
   }
 
   _generateDrinkMarkup(recipe) {

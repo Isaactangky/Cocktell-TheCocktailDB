@@ -46,7 +46,11 @@ button {
   background-color: var(--color-primary-light-2);
   color: var(--color-primary-dark-1);
 }
+html {
+  min-height: 100%;
+}
 body {
+  min-height: 100%;
   color: var(--color-primary-dark-2);
   font-family: var(--font-primary);
   font-size: 62.5%;
@@ -65,10 +69,9 @@ body {
   left: 0;
   top: 0;
   z-index: 5;
-  /* display: none; */
+  display: none;
 }
 .page-wrapper {
-  height: auto;
   min-height: 60rem;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -269,11 +272,11 @@ main {
   cursor: pointer;
   /* display: none; */
   transform: translateX(-105%);
-  transition: transform 1s ease;
+  transition: transform 1.5s ease;
 }
 .menu-icon:hover {
-  background-color: var(--color-primary-light-3);
-  color: var(--color-primary-dark-1);
+  background-color: var(--color-primary-dark-1);
+  color: var(--color-primary-light-3);
 }
 .side-menu {
   grid-row: 1/2;
@@ -494,6 +497,9 @@ ul.ingredients {
 .similar-drinks-box {
   background-color: var(--color-primary-dark-1);
 }
+.similar-drinks-container {
+  min-height: 1px;
+}
 .similar-drinks-list {
   padding: 0 var(--padding-recipe-main-LR) 2rem;
   min-height: 6rem;
@@ -546,6 +552,8 @@ ul.ingredients {
 @media (max-width: 1100px) {
   :root {
     --column-width-page-wrapper: 15rem;
+    --column-width-page-wrapper-negative: -15rem;
+
     --column-width-recipe-view: 12rem;
     --font-size-recipe-title: 2.8rem;
     --font-size-preview-title: 0.9rem;
@@ -561,9 +569,9 @@ ul.ingredients {
   .page-wrapper {
     border-radius: 0px;
   }
-  #search-by {
+  /* #search-by {
     display: none;
-  }
+  } */
 }
 
 @media (max-width: 850px) {
@@ -586,6 +594,9 @@ ul.ingredients {
   }
   .recipe-wrapper {
     grid-column: 1/3;
+  }
+  .welcome-message-container {
+    /* margin-right: 3rem; */
   }
   .hidden {
     display: none;
