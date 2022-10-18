@@ -1,8 +1,6 @@
-# Cocktell - Search Cocktail Recipe
+# Cocktell - Search Cocktail Recipe - JavaScript Project
 
-This is the final project "Forkify" of [The Complete JavaScript Course 2022: From Zero to Expert!](https://www.udemy.com/course/the-complete-javascript-course/). This course solidify my understanding on different JavaScript concepts (e.g. DOM, Mordern OOP, Asynchronous JS and Modern tools for JS) and gives me useful exercises and realistic project to improve my coding skills.
-
-The project "Cocktell" is project to practice Asynchronous JS, OOP, Error Handling and other tools such as NPM, Parcel and Git. The appllication incorporate search function, a user can search for diffent cocktail recipes by cocktail name or ingredient. The user can then view the recipe details, change servings and bookmark a recipe. The user can also upload a self-generated recipe to the API.
+"Cocktell" is a project to practice Asynchronous JS, API fetching, OOP, Error Handling and other tools such as NPM, Parcel and Github. The appllication incorporate a search function, a user can search for diffent cocktail recipes by cocktail name or by single ingredient. A user can then view the recipe details and get similar cocktails suggestions.
 
 The project consumes data from [CocktailDB API](https://www.thecocktaildb.com/api.php).
 
@@ -25,98 +23,134 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [Forkify Netlify](https://forkify-isaactangky.netlify.app/)
+- Live Site URL: [Cocktell Netlify]()
 
 ## My process
 
 ### Built with
 
-- AJAX, fetch API
-- DOM Manipulation
-- Error handling and error message rendering
-- Model-View-Controller Architecture
-- OOP
-- Publisher/Subcriber Pattern
-- [Fracty](https://www.npmjs.com/package/fracty) - npm
+- HTML5
+- CSS
+- GitHub
+- JavaScript (ES6)
+- [Axios](https://axios-http.com/)
 - [Parcel](https://parceljs.org/)
+- Model-View-Controller Pattern
+- OOP
 
-### What I learned
+### Development process
 
-The **MVC architecture** is the most important concept I learned in the project. I was amazed by how this help to clearify the structure of the projects. From my understanding, model helps to deal with the business logic and state, Controller calls the actual functions and View components accept user input and render information to the user. This architecture help to increase the maintainability and expandibility of the codes. I look forward to exploring more on this architecture and other architecture concepts.
+### Search Field
 
-The **Publish-subcribe pattern** is a useful solution to add EventListener to views. Under the MVC architecture, the eventListener should be added in the View component, and corresponding callback functions are defined in Controller. Since the handler should not be defined in the View, we define funtions to accept handlers from contraller:
+Four endpoints were chosen:
+
+- Search by ingredient: https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=Gin
+- Search by name: https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita
+- Random cocktail: https://www.thecocktaildb.com/api/json/v1/1/random.php
+- Lookup full cocktail details by id: https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=11007
+
+Choosing from the radio options (ingredient or name) sets the query type passed to the api call. A ternary operator help us to get the endpoint.
 
 ```js
-addHandlerSearch(handler) {
-    this._parentElement.addEventListener('submit', function (e) {
-      e.preventDefault() // cannot call handler directly
-      handler();
-    });
+export const loadSearchResults = async function (query, queryType) {
+  try {
+    const endpoint =
+      queryType === "ingredient" ? "filter.php?i=" : "search.php?s=";
+    const { drinks } = await AJAX(`${API_LINK}${endpoint}${query}`);
+    ...
+  } catch (error) {
+    ...
   }
+};
 ```
 
-and call the addHandler methods at page load. By applying the pattern, we do not need to add event listeners in the controller, which means that we can maintain the MVC structure.
+#### Cocktail Detail Page
 
-The **Algorithm to Update the DOM** was also good lesson to me. I was also frustrated by the that the whole page has to be reloaded even when I change only one component in the DOM. Janas' algorithm creates a virtual DOM fragment containing the new elements, compares the existing DOM and new elements, updates the element text content and attribute only when there are any changes. This algorithm prevent the whole page reloading and flashing. This algorithm is useful in reducing the page loads and improving user experience.
+The detail page is fetched when hash changes or page loaded. The hash id then passed to the corresponding api call.
 
-**Error Handling**
-
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
-
-To see how you can add code snippets, see below:
-
-```html
-<h1>Some HTML code I'm proud of</h1>
+```js
+export const loadRecipe = async function (id) {
+  try {
+    const { drinks } = await AJAX(`${API_LINK}lookup.php?i=${id}`);
+    state.recipe = formatDrink(drinks[0], false);
+  }
+  ...
+};
 ```
 
-```css
-.proud-of-this-css {
-  color: papayawhip;
-}
+The data from the endpoints are not in the same format, some endpoints only deliver brief information. This was resolved by using short circuting and spread operator:
+
+```js
+const formatDrink = function (drink, preview = true) {
+  return {
+    id: drink.idDrink,
+    name: drink.strDrink,
+    imgSrc: `${drink.strDrinkThumb}${preview ? "/preview" : ""}`,
+    ...(drink.strCategory && { category: drink.strCategory }),
+    ...(drink.strGlass && { glass: drink.strGlass }),
+    ...(drink.strIBA && { IBA: drink.strIBA }),
+    ...(drink.strAlcoholic && { alcoholic: drink.strAlcoholic }),
+    // TODO reformat instructions
+    ...(drink.strInstructions && { instructions: drink.strInstructions }),
+    ...(!preview && { ingredients: formatIngredients(drink) }),
+  };
+};
 ```
 
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
+The ingredients data from the API was unstructured and with many empty or null values, and the ingredients and measures are separated in to different key: value pairs. A seperate function is defined to resoleve this challenge:
 
-**Note: Delete this note and the content within this section and replace with your own learnings.**
+```js
+const formatIngredients = function (drink) {
+  const ingredients = Object.entries(drink)
+    .filter((ele) => ele[0].startsWith("strIngredient") && ele[1])
+    .map((ele) => ele[1]);
+  const quantity = Object.entries(drink)
+    .filter((ele) => ele[0].startsWith("strMeasure") && ele[1])
+    .map((ele) => ele[1]);
+  const arrIng = [];
+  ingredients.forEach((e, i) => arrIng.push([e, quantity[i] || null]));
+  return arrIng;
+};
+```
+
+#### Similar cocktails
+
+The similar cocktails recommendation was created search all the relavant cocktails by ingredients from the cocktail on show, then randomly choose the cocktail from the pool.
+
+```js
+export const generateSimilarDrinks = async function () {
+  try {
+    const ingredients = state.recipe.ingredients.map((e) => e[0]);
+    const data = await AJAXBatch(`${API_LINK}filter.php`, ingredients, "i");
+    const drinks = data.reduce((arr, cur) => [...arr, ...cur.drinks], []);
+    state.similarDrinks = [];
+    for (let i = 0; i < NUM_SIMILAR_DRINK ** 2; i++) {
+      // Select one new drink from the results
+      const drink = drinks[Math.floor(Math.random() * drinks.length)];
+      if (
+        !state.similarDrinks.find((d) => d.id === drink.idDrink) &&
+        drink.idDrink !== state.recipe.id
+      ) {
+        state.similarDrinks.push(formatDrink(drink, true));
+      }
+      if (state.similarDrinks.length >= NUM_SIMILAR_DRINK) break;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+```
+
+#### Random Cocktail
+
+The "Shake a Cocktail" and "Cocktail of the Day" functions are achieve geting data from the random endpoint. The random cocktail(s) are then display in the recipe view or search result view.
 
 ### Continued development
 
 New features to be implements
 
-- displaying no of pages at the bottom of Pagination area
-- sort search results by duration / num of ing
-- perform ingredient input validation
-- improve recipe ingredient input
-
-- shopping list feature
-
-- Weekly meal planning feature
-
-- Get nutrition data from food-api
-
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
-
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
-
-### Useful resources
-
-- [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
-- [Example resource 2](https://www.example.com) - This is an amazing article which helped me finally understand XYZ. I'd recommend it to anyone still learning this concept.
-
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
-
-## Author
-
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
-- Twitter - [@yourusername](https://www.twitter.com/yourusername)
-
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
-
-## Acknowledgments
-
-All html and CSS designs are credited to Jonas Schmedtmann.
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+- improving responsive web design
+- sort search results
+- bookmark feature
+- improving failed search notifications
+- add backend server and login function
