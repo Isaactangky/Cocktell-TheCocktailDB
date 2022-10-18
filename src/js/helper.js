@@ -25,15 +25,19 @@ export const AJAX = async function (url, params = {}) {
   }
 };
 
-export const AJAXBatch = async function (counts, url, params = {}) {
+export const AJAXBatch = async function (url, paramsArr = [], paramsType) {
   try {
-    const iterations = Array.from(Array(counts).keys());
-    // axios.get('https://www.thecocktaildb.com/api/json/v1/1/lookup.php', {
     const response = await Promise.allSettled(
-      iterations.map(async (_) => await axios.get(url, params))
+      paramsArr.map(
+        async (p) =>
+          await axios.get(url, {
+            params: paramsType ? { [paramsType]: p } : {},
+          })
+      )
     );
+    // get fulfiled response and non empty data
     const dataArray = response
-      .filter((res) => res.status === "fulfilled")
+      .filter((res) => res.status === "fulfilled" && res.value.data !== "")
       .map((res) => res.value.data);
     return dataArray;
   } catch (err) {
