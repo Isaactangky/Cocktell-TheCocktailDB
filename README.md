@@ -23,7 +23,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [Cocktell Netlify]()
+- Live Site URL: [Cocktell Netlify](https://cocktell.netlify.app/#17248)
 
 ## My process
 
@@ -40,7 +40,7 @@ Users should be able to:
 
 ### Development process
 
-### Search Field
+#### Search Field
 
 Four endpoints were chosen:
 
@@ -97,7 +97,7 @@ const formatDrink = function (drink, preview = true) {
 };
 ```
 
-The ingredients data from the API was unstructured and with many empty or null values, and the ingredients and measures are separated in to different key: value pairs. A seperate function is defined to resoleve this challenge:
+The ingredients data from the API was unstructured and with many empty or null values, and the ingredients and measures are separated into different key: value pairs. A seperate function is defined to resoleve this challenge:
 
 ```js
 const formatIngredients = function (drink) {
@@ -115,7 +115,7 @@ const formatIngredients = function (drink) {
 
 #### Similar cocktails
 
-The similar cocktails recommendation was created search all the relavant cocktails by ingredients from the cocktail on show, then randomly choose the cocktail from the pool.
+The similar cocktails recommendation was created by pooling all the relavant cocktails from api calls by ingredients of the cocktail on show, then randomly choose some cocktails from the pool.
 
 ```js
 export const generateSimilarDrinks = async function () {
@@ -143,11 +143,35 @@ export const generateSimilarDrinks = async function () {
 
 #### Random Cocktail
 
-The "Shake a Cocktail" and "Cocktail of the Day" functions are achieve geting data from the random endpoint. The random cocktail(s) are then display in the recipe view or search result view.
+The "Shake a Cocktail" and "Cocktail of the Day" functions are achieved by geting data from the random endpoint. The random cocktail(s) are then displayed in the recipe view or search result view.
+
+"Cocktails of the Day" are generated daily and saved in the browser, if there is no local storage item, cocktails recommendations will be regenerated.
+
+### Running batch API calls
+
+When fetching daily recommendations or similar drinks, multiple API calls have to be made. Instead of using a for-loop and await for the results on by one (synchronous behavior), Promise.all() is used to handle the batch AJAX calls concurrently:
+
+```js
+// helper.js
+export const AJAXBatch = async function (url, paramsArr = [], paramsType) {
+  try {
+    const promises = paramsArr.map((p) =>
+      axios.get(url, {
+        params: paramsType ? { [paramsType]: p } : {},
+      })
+    );
+    const response = await Promise.race([
+      timeout(TIMEOUT),
+      Promise.allSettled(promises),
+    ]);
+    ...
+  } catch (err) {
+    throw err;
+  }
+};
+```
 
 ### Continued development
-
-New features to be implements
 
 - improving responsive web design
 - sort search results

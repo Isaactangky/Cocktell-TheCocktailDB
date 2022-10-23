@@ -33,8 +33,19 @@ class RecipeView extends View {
       window.addEventListener(event, handler)
     );
   }
+  addHandlerAddBookmark(handler) {
+    console.log("click");
+    this._container.addEventListener("click", function (e) {
+      const btn = e.target.closest(".btn-bookmark");
+      if (!btn) return;
+      handler();
+    });
+  }
   _generateCategoryMarkup() {
     return `<ul class="recipe-category">
+         <i class="fa-${
+           this._data.bookmarked ? "solid" : "regular"
+         } fa-bookmark btn-bookmark"></i>
         <li class="category">
           Category: <span class="category-text">${this._data.category}</span>
         </li>
@@ -50,6 +61,7 @@ class RecipeView extends View {
           Glass to use:
           <span class="category-text">${this._data.glass}</span>
         </li>
+        
       </ul>`;
   }
   _generateInstructionsMarkup() {

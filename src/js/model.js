@@ -5,6 +5,7 @@ import {
   RECIPES_PER_PAGE,
 } from "./config.js";
 import { AJAX, AJAXBatch } from "./helper.js";
+import bookmarkView from "./views/bookmarkView.js";
 export const state = {
   search: {
     type: "",
@@ -40,7 +41,6 @@ const formatDrink = function (drink, preview = true) {
     ...(drink.strGlass && { glass: drink.strGlass }),
     ...(drink.strIBA && { IBA: drink.strIBA }),
     ...(drink.strAlcoholic && { alcoholic: drink.strAlcoholic }),
-    // TODO reformat instructions
     ...(drink.strInstructions && { instructions: drink.strInstructions }),
     ...(!preview && { ingredients: formatIngredients(drink) }),
   };
@@ -115,7 +115,13 @@ export const loadRandomRecipes = async function () {
 export const loadRecipe = async function (id) {
   try {
     const { drinks } = await AJAX(`${API_LINK}lookup.php?i=${id}`);
+    if (!drinks) throw new Error("Not a valid cocktail ID");
     state.recipe = formatDrink(drinks[0], false);
+    state.recipe.bookmarked = state.bookmarks.find(
+      (bookmark) => bookmark.id === state.recipe.id
+    )
+      ? true
+      : false;
   } catch (error) {
     throw error;
   }
@@ -146,6 +152,32 @@ export const generateSimilarDrinks = async function () {
       if (state.similarDrinks.length >= NUM_SIMILAR_DRINK) break;
     }
   } catch (error) {
+    error.status = 400;
     throw error;
   }
 };
+const saveBookmarks = function () {
+  const bookmarks = JSON.stringify(state.bookmarks);
+  localStorage.setItem("cocktailBookmarks", bookmarks);
+};
+export const addBookmark = function (recipe) {
+  state.bookmarks.push(recipe);
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+  saveBookmarks();
+};
+export const deleteBookmark = function (recipe) {
+  const index = state.bookmarks.findIndex(
+    (bookmark) => bookmark.id === recipe.id
+  );
+  console.log("bm", state.bookmarks);
+  console.log(index);
+  state.bookmarks.splice(index, 1);
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = false;
+  saveBookmarks();
+};
+
+const init = function () {
+  const bookmarks = localStorage.getItem("cocktailBookmarks");
+  if (bookmarks) state.bookmarks = JSON.parse(bookmarks);
+};
+init();

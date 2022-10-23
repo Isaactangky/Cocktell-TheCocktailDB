@@ -1,20 +1,21 @@
-import { TIMEOUT, API_LINK } from "./config";
+import { TIMEOUT } from "./config";
 
 import axios from "axios";
 const timeout = function (s) {
   return new Promise(function (_, reject) {
     setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
+      const error = new Error(
+        `Request took too long! Timeout after ${s} second`
+      );
+      error.status = 408;
+      reject(error);
     }, s * 1000);
   });
 };
 
 export const AJAX = async function (url, params = {}) {
   try {
-    // axios.get('https://www.thecocktaildb.com/api/json/v1/1/lookup.php', {
-
-    const res = await axios.get(url, params);
-    // const res = await fetch(url);
+    const res = await Promise.race([axios.get(url, params), timeout(TIMEOUT)]);
     const { data } = res;
     // if (res.status !== 200 || !data)
     if (res.status !== 200)
@@ -27,13 +28,16 @@ export const AJAX = async function (url, params = {}) {
 
 export const AJAXBatch = async function (url, paramsArr = [], paramsType) {
   try {
-    const response = await Promise.allSettled(
-      paramsArr.map((p) =>
-        axios.get(url, {
-          params: paramsType ? { [paramsType]: p } : {},
-        })
-      )
+    const promises = paramsArr.map((p) =>
+      axios.get(url, {
+        params: paramsType ? { [paramsType]: p } : {},
+      })
     );
+
+    const response = await Promise.race([
+      timeout(TIMEOUT),
+      Promise.allSettled(promises),
+    ]);
     // get fulfiled response and non empty data
     const dataArray = response
       .filter((res) => res.status === "fulfilled" && res.value.data !== "")
@@ -43,4 +47,3 @@ export const AJAXBatch = async function (url, paramsArr = [], paramsType) {
     throw err;
   }
 };
-// AJAX().then(() => {});

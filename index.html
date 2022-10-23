@@ -12,8 +12,8 @@
       href="https://fonts.googleapis.com/css2?family=Peralta&family=Poppins:wght@300;400;700;900&display=swap"
       rel="stylesheet"
     />
+    <!-- The defer attribute has no effect on module scripts — they defer by default. -->
     <script
-      defer
       src="https://kit.fontawesome.com/b616c6ed71.js"
       crossorigin="anonymous"
     ></script>
@@ -32,7 +32,7 @@
             <p class="app">Cocktell</p>
           </a>
         </div>
-        <form action="" class="search-form">
+        <form action="/" class="search-form">
           <!-- <div class="search-input-options"> -->
           <div class="search-field">
             <input
@@ -65,6 +65,12 @@
         </form>
         <div class="other-functions">
           <button class="random-cocktail-btn btn-dark">Shack A Cocktail</button>
+          <button class="btn-show-bookmark btn-dark">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </button>
+          <div class="bookmarks">
+            <ul class="preview-container-bookmarks"></ul>
+          </div>
         </div>
         <div class="loader hidden">
           <div class="a"></div>
@@ -74,9 +80,10 @@
       <!-- <div class="loader" style="display: none"> -->
 
       <main>
-        <div class="menu-icon btn-light active">
+        <div class="menu-icon active">
           <i class="fa-solid fa-bars"></i>
         </div>
+
         <div class="side-menu">
           <div class="search-title-container">
             <p class="search-title">Cocktails of the Day</p>
@@ -84,7 +91,7 @@
             Result for: <span class="search-query"></span>
           </p> -->
           </div>
-          <ul class="preview-container">
+          <ul class="preview-container-search-results">
             <!-- <li class="preview">
             <a class="preview-link" href="#">
               <img
@@ -124,7 +131,12 @@
             </button> -->
           </div>
           <footer>
-            <p>© Copyright by Isaac Tang</p>
+            <p>
+              © Copyright by
+              <a href="https://github.com/Isaactangky" target="_blank"
+                >Isaac Tang</a
+              >
+            </p>
           </footer>
         </div>
         <div class="recipe-wrapper">

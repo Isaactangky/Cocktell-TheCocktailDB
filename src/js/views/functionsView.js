@@ -1,4 +1,4 @@
-class RandomView {
+class FunctionsView {
   _container = document.querySelector(".other-functions");
   // _errorMessage = "Cannot find recipes.";
 
@@ -11,4 +11,4 @@ class RandomView {
   }
 }
 
-export default new RandomView();
+export default new FunctionsView();
