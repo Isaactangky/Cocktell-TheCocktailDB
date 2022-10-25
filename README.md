@@ -23,7 +23,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [Cocktell Netlify](https://cocktell.netlify.app/#17248)
+- Live Site URL: [Cocktell Netlify](https://cocktell.netlify.app)
 
 ## My process
 
