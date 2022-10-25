@@ -18,8 +18,7 @@ Users should be able to:
 - View a recipe in the Recipe area when they click on a preview in the Pagination area
 - Change servings of the menu and view immediate change in the quantity of ingredient
 - Bookmark recipes and view bookmarked recipes in the Bookmark view
-- Upload user-generated recipes to the API
-- Load bookmarks and user-generated recipes when they reload the page
+- Load bookmarks recipes when they reload the page
 
 ### Links
 
