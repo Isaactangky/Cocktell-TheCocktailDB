@@ -12,3 +12,6 @@ class BookmarkView extends PreviewView {
 }
 
 export default new BookmarkView();
+
+// TODO display message when no bookmark
+// add bookmark icon on preview

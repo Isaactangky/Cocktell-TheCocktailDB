@@ -17,6 +17,7 @@ export const AJAX = async function (url, params = {}) {
   try {
     const res = await Promise.race([axios.get(url, params), timeout(TIMEOUT)]);
     const { data } = res;
+
     // if (res.status !== 200 || !data)
     if (res.status !== 200)
       throw new Error("Cannot find receipt, please try again");
@@ -28,6 +29,15 @@ export const AJAX = async function (url, params = {}) {
 
 export const AJAXBatch = async function (url, paramsArr = [], paramsType) {
   try {
+    // for Rondom endpoint, use sequential fetch
+    if (!paramsType) {
+      const data = [];
+      for (let i = 0; i < paramsArr.length; i++) {
+        const res = await axios.get(url);
+        data.push(res.data);
+      }
+      return data;
+    }
     const promises = paramsArr.map((p) =>
       axios.get(url, {
         params: paramsType ? { [paramsType]: p } : {},

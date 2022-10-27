@@ -169,8 +169,6 @@ export const deleteBookmark = function (recipe) {
   const index = state.bookmarks.findIndex(
     (bookmark) => bookmark.id === recipe.id
   );
-  console.log("bm", state.bookmarks);
-  console.log(index);
   state.bookmarks.splice(index, 1);
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = false;
   saveBookmarks();
